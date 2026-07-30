@@ -1,5 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, screen-orientation=portrait">
+    <title>Информационный справочник</title>
+    <!-- Подключение VK Bridge -->
+    <script src="https://unpkg.com"></script>
+    <style>
+        :root {
+            --vk-background: #ebedf0;
+            --vk-text-primary: #000000;
+            --vk-text-secondary: #818c99;
+            --vk-card-bg: #ffffff;
+            --vk-button-bg: #f5f6f8;
+            --vk-button-active: #e1e3e6;
+            --vk-accent: #2688eb;
+            --vk-accent-active: #1c77d5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 12px;
+            background-color: var(--vk-background);
+            color: var(--vk-text-primary);
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            background: var(--vk-card-bg);
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            min-height: 24px;
+        }
+
+        .btn-back {
+            display: none;
+            color: var(--vk-accent);
+            font-weight: 500;
+            cursor: pointer;
+            padding-right: 12px;
+        }
+        .btn-back:active {
+            color: var(--vk-accent-active);
+        }
+
+        .header-title {
+            font-size: 17px;
+            font-weight: 600;
+            flex-grow: 1;
+        }
+
+        .card {
+            background: var(--vk-card-bg);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-image {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+        }
+
+        .card-description {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #333333;
+            white-space: pre-wrap;
+        }
+
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu-button {
+            background: var(--vk-button-bg);
+            color: var(--vk-accent);
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.15s ease;
+        }
+
+        .menu-button:active {
+            background: var(--vk-button-active);
+        }
+
+        .menu-button::after {
+            content: "›";
+            font-size: 20px;
+            color: var(--vk-text-secondary);
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Шапка приложения -->
+        <div class="header">
+            <div id="back-button" class="btn-back" onclick="navigateBack()">← Назад</div>
+            <div id="app-header-title" class="header-title">Главная</div>
+        </div>
+
+        <!-- Контент текущего экрана -->
+        <div class="card">
+            <img id="screen-image" class="card-image" src="" alt="Иллюстрация">
+            <h1 id="screen-title" class="card-title">Загрузка...</h1>
+            <div id="screen-text" class="card-description">Пожалуйста, подождите.</div>
+        </div>
+
+        <!-- Кнопки переходов -->
+        <div id="buttons-menu" class="menu-container"></div>
+    </div>
+
     <script>
-        // БЕЗОПАСНАЯ ИНИЦИАЛИЗАЦИЯ VK BRIDGE (Вместо старой одиночной строки)
+        // Инициализация VK Bridge после загрузки страницы
         window.addEventListener('DOMContentLoaded', () => {
             vkBridge.send("VKWebAppInit")
                 .then((data) => {
@@ -57,7 +204,6 @@
             }
         };
 
-        // Логика навигации (История переходов)
         let navigationHistory = [];
         let currentScreenId = "start";
 
@@ -113,6 +259,8 @@
             }
         }
 
-        // Запуск первой отрисовки экрана при старте приложения
+        // Первая отрисовка
         renderScreen("start");
     </script>
+</body>
+</html>
