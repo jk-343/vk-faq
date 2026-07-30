@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, screen-orientation=portrait">
     <title>Информационный справочник</title>
-    <!-- Подключаем библиотеку VK Bridge -->
-    <script src="https://unpkg.com"></script>
     <style>
         :root {
             --vk-background: #ebedf0;
@@ -54,6 +52,7 @@
             cursor: pointer;
             padding-right: 12px;
         }
+
         .btn-back:active {
             color: var(--vk-accent-active);
         }
@@ -128,49 +127,53 @@
 <body>
 
     <div class="app-container">
-        <!-- Шапка приложения -->
         <div class="header">
             <div id="back-button" class="btn-back" onclick="navigateBack()">← Назад</div>
             <div id="app-header-title" class="header-title">Главная</div>
         </div>
 
-        <!-- Контент текущего экрана -->
         <div class="card">
             <img id="screen-image" class="card-image" src="" alt="Иллюстрация">
             <h1 id="screen-title" class="card-title">Загрузка...</h1>
             <div id="screen-text" class="card-description">Пожалуйста, подождите.</div>
         </div>
 
-        <!-- Кнопки переходов -->
         <div id="buttons-menu" class="menu-container"></div>
     </div>
 
     <script>
-        // Умная инициализация VK Bridge, адаптированная под десктопные iframe
-        function initVkBridge() {
+        // Асинхронное динамическое подключение библиотеки
+        const script = document.createElement('script');
+        script.src = "https://unpkg.com";
+        script.onload = function() {
             if (typeof vkBridge !== 'undefined') {
+                // Инициализируем мост
                 vkBridge.send("VKWebAppInit", {})
-                    .then((data) => {
-                        console.log("Успешное подключение к VK:", data);
-                        renderScreen("start"); // Рисуем меню только ПОСЛЕ успешной связи с ВК
+                    .then(() => {
+                        console.log("Мост ВК успешно запущен");
+                        renderScreen("start");
                     })
-                    .catch((error) => {
-                        console.error("Ошибка моста, пробуем запуск без VK:", error);
-                        renderScreen("start"); // Запускаем автономно, если мост заблокирован
+                    .catch(() => {
+                        // Если мост упал в iframe, всё равно принудительно запускаем меню
+                        renderScreen("start");
                     });
             } else {
                 renderScreen("start");
             }
-        }
+        };
+        script.onerror = function() {
+            renderScreen("start");
+        };
+        document.head.appendChild(script);
 
-        // БАЗА ДАННЫХ ВАШЕЙ ЧАТ-КАРТЫ
+        // БАЗА ДАННЫХ ЧАТ-КАРТЫ
         const FAQ_DATA = {
             "start": {
                 title: "Приветствуем!",
                 text: "Это главное меню вашего справочника. Выберите интересующую категорию ниже для навигации по карте проекта.",
                 image: "",
                 buttons: [
-                    { text: "📁 Раздел 1 (Левая ветка)", target: "section_1" },
+                    { text: "📁 Раздел 0 (Левая ветка)", target: "section_1" },
                     { text: "📁 Раздел 2 (Центральная ветка)", target: "section_2" },
                     { text: "📁 Раздел 3 (Правая ветка)", target: "section_3" },
                     { text: "ℹ️ О проекте", target: "about" }
@@ -264,9 +267,6 @@
                 renderScreen(previousScreenId);
             }
         }
-
-        // Запускаем безопасную проверку моста
-        initVkBridge();
     </script>
 </body>
 </html>
