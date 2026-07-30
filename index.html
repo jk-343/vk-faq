@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, screen-orientation=portrait">
     <title>Информационный справочник</title>
-    <!-- Подключение VK Bridge -->
+    <!-- Подключение библиотеки VK Bridge в самом начале для десктопного iframe -->
     <script src="https://unpkg.com"></script>
     <style>
         :root {
@@ -146,16 +146,18 @@
     </div>
 
     <script>
-        // Инициализация VK Bridge после загрузки страницы
-        window.addEventListener('DOMContentLoaded', () => {
-            vkBridge.send("VKWebAppInit")
+        // Принудительный и немедленный запуск моста VK Bridge для iframe десктопа
+        try {
+            vkBridge.send("VKWebAppInit", {})
                 .then((data) => {
-                    console.log("VK Bridge успешно инициализирован", data);
+                    console.log("VK Bridge успешно подключен к платформе:", data);
                 })
                 .catch((error) => {
-                    console.error("Ошибка инициализации:", error);
+                    console.error("Сбой соединения с ВК:", error);
                 });
-        });
+        } catch (e) {
+            console.error("Критическая ошибка моста:", e);
+        }
 
         // БАЗА ДАННЫХ ВАШЕЙ ЧАТ-КАРТЫ
         const FAQ_DATA = {
@@ -259,7 +261,7 @@
             }
         }
 
-        // Первая отрисовка
+        // Запуск интерфейса
         renderScreen("start");
     </script>
 </body>
