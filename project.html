@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FAQ Приложение</title>
+    <!-- Подключаем VK Bridge для интеграции с ВК -->
+    <script src="https://unpkg.com"></script>
+    <style>
+        /* Базовые стили под дизайн VK */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 16px;
+            background-color: #ebedf0;
+            color: #000000;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .page {
+            display: none;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .page.active {
+            display: block;
+        }
+        h1 {
+            font-size: 20px;
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        h2 {
+            font-size: 18px;
+            margin-top: 0;
+        }
+        /* Стили кнопок-категорий */
+        .faq-item {
+            padding: 14px;
+            background: #f5f6f8;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .faq-item:active {
+            background: #e1e3e6;
+        }
+        /* Кнопка "Назад" */
+        .btn-back {
+            display: inline-block;
+            margin-bottom: 16px;
+            padding: 8px 14px;
+            background: #4986cc;
+            color: #ffffff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .btn-back:active {
+            background: #3f75b3;
+        }
+        .answer-text {
+            line-height: 1.5;
+            color: #333333;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- СТРАНИЦА 1: Главное меню (Список вопросов) -->
+    <div id="main-page" class="page active">
+        <h1>Часто задаваемые вопросы</h1>
+        <p>Выберите интересующий вас раздел:</p>
+        
+        <div class="faq-item" onclick="navigateTo('q1')">Как это работает?</div>
+        <div class="faq-item" onclick="navigateTo('q2')">Сколько это стоит?</div>
+        <div class="faq-item" onclick="navigateTo('q3')">Как связаться с поддержкой?</div>
+    </div>
+
+    <!-- СТРАНИЦА 2: Ответ на вопрос 1 -->
+    <div id="page-q1" class="page">
+        <div class="btn-back" onclick="navigateTo('main')">← Назад</div>
+        <h2>Как это работает?</h2>
+        <div class="answer-text">
+            <p>Наше приложение работает полностью внутри ВКонтакте. Вам не нужно ничего скачивать на телефон.</p>
+            <p>Перемещайтесь по пунктам меню, чтобы быстро находить нужную информацию.</p>
+        </div>
+    </div>
+
+    <!-- СТРАНИЦА 2: Ответ на вопрос 2 -->
+    <div id="page-q2" class="page">
+        <div class="btn-back" onclick="navigateTo('main')">← Назад</div>
+        <h2>Сколько это стоит?</h2>
+        <div class="answer-text">
+            <p>Это абсолютно бесплатно!</p>
+            <p>Мы создали этот справочник, чтобы помочь пользователям мгновенно получать ответы на базовые вопросы.</p>
+        </div>
+    </div>
+
+    <!-- СТРАНИЦА 2: Ответ на вопрос 3 -->
+    <div id="page-q3" class="page">
+        <div class="btn-back" onclick="navigateTo('main')">← Назад</div>
+        <h2>Как связаться с поддержкой?</h2>
+        <div class="answer-text">
+            <p>Если вы не нашли ответ на свой вопрос, напишите нам в личные сообщения нашего сообщества.</p>
+            <p>Мы отвечаем в течение 15 минут.</p>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация VK Bridge (обязательно для всех мини-приложений)
+        vkBridge.send("VKWebAppInit");
+
+        // Функция для переключения между экранами
+        function navigateTo(pageId) {
+            // Скрываем все страницы
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+
+            // Показываем нужную страницу
+            if (pageId === 'main') {
+                document.getElementById('main-page').classList.add('active');
+            } else {
+                document.getElementById('page-' + pageId).classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
